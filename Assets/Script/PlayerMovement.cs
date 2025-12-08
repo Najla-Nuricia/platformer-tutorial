@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.05f);
     public LayerMask groundLayer;
+    bool isGrounded;
 
     [Header("Gravity")]
     public float baseGravity = 2f;
@@ -30,12 +31,17 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 wallCheckSize = new Vector2(0.5f, 0.05f);
     public LayerMask wallLayer;
 
-
+    [Header("WallMovement")]
+    public float wallSlideSpeed = 2;
+    bool isWallSliding; 
     void Update()
     {
         rb.linearVelocity = new Vector2(horizontalMovement * movespeed, rb.linearVelocity.y);
-        processGravity();
+        
+        log();
         GroundCheck();
+        processGravity();
+        processWallSlide();
         Flip();
     }
 
@@ -43,6 +49,16 @@ public class PlayerMovement : MonoBehaviour
     {
        rb.gravityScale = baseGravity * fallSpeedMultiplier;
        rb.linearVelocity = new Vector2(rb.linearVelocity.x , Mathf.Max(rb.linearVelocity.y, -maxFallSpeed));
+    }
+
+    private void log()
+    {
+         Debug.Log(
+        "Grounded = " + isGrounded +
+        " | Wall = " + wallCheck() +
+        " | WallSlide = " + isWallSliding +
+        " | VelocityY = " + rb.linearVelocity.y
+        );
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -73,8 +89,17 @@ public class PlayerMovement : MonoBehaviour
         if(Physics2D.OverlapBox(groundCheckPos.position , groundCheckSize, 0, groundLayer))
         {
             jumpsRemaining = maxJump;
+            isGrounded = true;
+        } else
+        {
+            isGrounded = false;
         }
 
+    }
+
+    public bool wallCheck()
+    {
+        return Physics2D.OverlapBox(wallCheckPos.position , wallCheckSize, 0, wallLayer);
     }
 
     public void processGravity()
@@ -85,6 +110,23 @@ public class PlayerMovement : MonoBehaviour
         } else
         {
             rb.gravityScale = baseGravity;
+        }
+    }
+
+    private void processWallSlide()
+    {
+        if (!isGrounded & wallCheck() & horizontalMovement !=0)
+        {
+            isWallSliding = true;
+            rb.gravityScale =0;
+
+            if(rb.linearVelocity.y > -wallSlideSpeed)
+            {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, - wallSlideSpeed);
+            }
+        } else
+        {
+            isWallSliding = false;
         }
     }
 
