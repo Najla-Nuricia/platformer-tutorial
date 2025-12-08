@@ -34,15 +34,26 @@ public class PlayerMovement : MonoBehaviour
     [Header("WallMovement")]
     public float wallSlideSpeed = 2;
     bool isWallSliding; 
+
+    //wall jump
+    bool isWallJumping;
+    float wallJumpiDirection;
+    float wallJumpTime = 0.5f;
+    float wallJumpTimer;
+    public Vector2 wallJumpPower = new Vector2(5f,10f);
     void Update()
     {
-        rb.linearVelocity = new Vector2(horizontalMovement * movespeed, rb.linearVelocity.y);
-        
-        log();
         GroundCheck();
         processGravity();
         processWallSlide();
-        Flip();
+        ProcessWallJump();
+    
+
+        if (!isWallJumping)
+        {
+            rb.linearVelocity = new Vector2(horizontalMovement * movespeed, rb.linearVelocity.y);
+            Flip();
+        }
     }
 
     private void Gravity()
@@ -81,6 +92,22 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
             jumpsRemaining--;
         }
+
+        }
+
+        //wall jump
+         if(context.performed && wallJumpTimer > 0f){
+            isWallJumping = true;
+            rb.linearVelocity = new Vector2(wallJumpiDirection * wallJumpPower.x , wallJumpPower.y);
+            wallJumpTimer =0;
+
+            //force flip 
+            if(transform.localScale.x != wallJumpiDirection)
+            {
+                FlipProcess();
+            }
+
+            Invoke(nameof(cancelWallJump), wallJumpTime + 0.1f);
         }
     }
 
@@ -130,14 +157,38 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void ProcessWallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping=false;
+            wallJumpiDirection = -transform.localScale.x;
+            wallJumpTimer = wallJumpTime;
+
+            CancelInvoke(nameof(cancelWallJump));
+        } else if(wallJumpTimer > 0f)
+        {
+            wallJumpTimer -= Time.deltaTime;
+        }
+    }
+
+    private void cancelWallJump()
+    {
+        isWallJumping = false;
+    }
+
+    private void FlipProcess(){
+        isFacingRight = !isFacingRight;
+        Vector3 ls = transform.localScale;
+        ls.x *= -1f;
+        transform.localScale = ls;
+    }
+
     private void Flip()
     {
         if(isFacingRight && horizontalMovement < 0 || !isFacingRight && horizontalMovement > 0)
         {
-            isFacingRight = !isFacingRight;
-            Vector3 ls = transform.localScale;
-            ls.x *= -1f;
-            transform.localScale = ls;
+            FlipProcess();
         }
     }
 
