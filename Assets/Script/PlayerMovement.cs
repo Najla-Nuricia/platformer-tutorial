@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
+    bool isFacingRight = true;
 
     [Header("Movement")]
     public float movespeed = 5f;
@@ -24,10 +25,18 @@ public class PlayerMovement : MonoBehaviour
     public float maxFallSpeed = 18f;
     public float fallSpeedMultiplier = 2f; 
 
+    [Header("WallCheck")] 
+    public Transform wallCheckPos;
+    public Vector2 wallCheckSize = new Vector2(0.5f, 0.05f);
+    public LayerMask wallLayer;
+
+
     void Update()
     {
         rb.linearVelocity = new Vector2(horizontalMovement * movespeed, rb.linearVelocity.y);
+        processGravity();
         GroundCheck();
+        Flip();
     }
 
     private void Gravity()
@@ -68,9 +77,33 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    public void processGravity()
+    {
+        if(rb.linearVelocity.y < 0)
+        {
+            Gravity();
+        } else
+        {
+            rb.gravityScale = baseGravity;
+        }
+    }
+
+    private void Flip()
+    {
+        if(isFacingRight && horizontalMovement < 0 || !isFacingRight && horizontalMovement > 0)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 ls = transform.localScale;
+            ls.x *= -1f;
+            transform.localScale = ls;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
         Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(wallCheckPos.position, wallCheckSize);
     }
 }
