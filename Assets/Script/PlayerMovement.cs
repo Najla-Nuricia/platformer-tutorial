@@ -41,6 +41,9 @@ public class PlayerMovement : MonoBehaviour
     float wallJumpTime = 0.5f;
     float wallJumpTimer;
     public Vector2 wallJumpPower = new Vector2(5f,10f);
+
+    public Animator animator;
+
     void Update()
     {
         GroundCheck();
@@ -54,6 +57,10 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(horizontalMovement * movespeed, rb.linearVelocity.y);
             Flip();
         }
+
+        animator.SetFloat("yVelocity" , rb.linearVelocity.y);
+        animator.SetFloat("Magnitude", rb.linearVelocity.magnitude);
+        animator.SetBool("isWallSliding", isWallSliding);
     }
 
     private void Gravity()
@@ -86,11 +93,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
             jumpsRemaining--;
+            animator.SetTrigger("Jump");
         }
         else if (context.canceled)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
             jumpsRemaining--;
+            animator.SetTrigger("Jump");
         }
 
         }
@@ -100,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
             isWallJumping = true;
             rb.linearVelocity = new Vector2(wallJumpiDirection * wallJumpPower.x , wallJumpPower.y);
             wallJumpTimer =0;
+            animator.SetTrigger("Jump");
 
             //force flip 
             if(transform.localScale.x != wallJumpiDirection)
