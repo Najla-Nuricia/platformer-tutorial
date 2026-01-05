@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fall
+  m_Name: gem
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,7 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: a82fb3c16ff5544489a62685a79a9431, type: 3}
+      value: {fileID: -8707133783163546048, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - time: 0.71666664
+      value: {fileID: -4573714622571964072, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - time: 1.35
+      value: {fileID: 887450894097603082, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - time: 2.1833334
+      value: {fileID: -8707133783163546048, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,13 +50,16 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: a82fb3c16ff5544489a62685a79a9431, type: 3}
+    - {fileID: -8707133783163546048, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - {fileID: -4573714622571964072, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - {fileID: 887450894097603082, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
+    - {fileID: -8707133783163546048, guid: 9a76982dc7aa2ff41a7a06d5e3ecb123, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 2.2
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
