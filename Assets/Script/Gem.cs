@@ -1,6 +1,8 @@
-using System.Reflection.Metadata;
-using System.Threading.Tasks.Dataflow;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
 
 public class Gem : MonoBehaviour, IItem
 {
@@ -9,7 +11,7 @@ public class Gem : MonoBehaviour, IItem
 
     public void collect()
     {
-        OnGemCollect.invoke(worth);
+        OnGemCollect.Invoke(worth);
         Destroy(gameObject);
     }
 }
