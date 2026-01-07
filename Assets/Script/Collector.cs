@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Collector : MonoBehaviour
 {
